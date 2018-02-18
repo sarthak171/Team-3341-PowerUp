@@ -8,10 +8,24 @@
  * floating around.
  */
 
+
+
 // For example to map the left and right motors, you could define the
 // following variables to use with your drivetrain subsystem.
-constexpr int LEFTMOTOR = 1;
-constexpr int RIGHTMOTOR = 2;
+constexpr int LEFTMOTOR = 2;
+constexpr int RIGHTMOTOR = 3;
+
+constexpr double error = 6; // fill this in later
+constexpr double To_Switch = 168 - 19 + error;
+constexpr double Mid_Targets = 228.735 - error;
+constexpr double To_Scale = 324 - 228.735;
+constexpr double Cross_Field = 231;
+constexpr double Forward_Switch = 55.56 - 19 - 16.75 - error;
+constexpr double Forward_Scale = 41.88 - 19 - 16.75 - error;
+constexpr double Forward_Mid = 70 - 19 + error;
+constexpr double Score_Mid = 70 -19 - error;
+constexpr double Cross_MidL = 54 + 16.75 - 12;
+constexpr double Cross_MidR = 54 + 16.75 + 12;
 
 // If you are using multiple modules, make sure to define both the port
 // number and the module. For example you with a rangefinder:

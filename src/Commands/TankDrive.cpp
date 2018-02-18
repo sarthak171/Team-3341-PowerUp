@@ -10,13 +10,17 @@ TankDrive::TankDrive()
 
 // Called just before this Command runs the first time
 void TankDrive::Initialize() {
-
+	//drive->setStartAbsTicks();
+	drive->resetEncoders();
 }
 
 // Called repeatedly when this Command is scheduled to run
-void TankDrive::Execute()
-{
-	drive->tankDrive(oi->getLeftStick(), oi->getRightStick());
+
+void TankDrive::Execute() {
+	drive->tankDrive(-oi->getLeftStick()->GetY(), -oi->getRightStick()->GetY());
+
+	//double average = (drive->leftDistance() + drive->rightDistance()) / 2;
+	// std::cout << drive->getAngle() << std::endl;
 }
 
 // Make this return true when this Command no longer needs to run execute()

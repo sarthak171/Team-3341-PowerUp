@@ -6,18 +6,60 @@
 #include <LiveWindow/LiveWindow.h>
 #include <SmartDashboard/SendableChooser.h>
 #include <SmartDashboard/SmartDashboard.h>
-
-
+#include "iostream"
+using namespace std;
 #include "CommandBase.h"
 #include "Commands/TankDrive.h"
+#include "Commands/DriveForward.h"
+#include "Commands/Turn.h"
+#include "Commands/LeftSwitch.h"
+#include "Commands/LeftScale.h"
+#include "Commands/Mid.h"
+#include "Commands/RightSwitch.h"
+#include "Commands/RightScale.h"
+#include "Commands/Auto_Mid_LSwitch.h"
+#include "Commands/Auto_Left_Switch.h"
+
+#include "Commands/Test.h"
+
+//#include <Commands/PrintCommand2.h>
 
 class Robot: public frc::IterativeRobot {
+
 public:
 	void RobotInit() override {
 		CommandBase::initialize();
-		chooser.AddDefault("Default Auto", new TankDrive());
-		// chooser.AddObject("My Auto", new MyAutoCommand());
+		std::cout<<"RobotInit Successful"<< std::endl;
+		std::string s = frc::DriverStation::GetInstance().GetGameSpecificMessage();
+		// Store the commands in the chooser, giving it ownership.
+		// To dynamically allocate a shared_ptr<> with a new Turn command
+		// these are equivalent:  std::shared_ptr<Turn>(new Turn(90.)
+		//                        std::make_shared<Turn>(90.)
+		//chooser.AddDefault("Default Auto - DriveForward", std::shared_ptr<DriveForward>(new DriveForward(100)));
+		chooser.AddDefault("Default", std::shared_ptr<DriveForward>(new DriveForward(4)));
+		chooser.AddObject("LeftSwitch", std::shared_ptr<Auto_Left_Switch>(new Auto_Left_Switch()));
+		chooser.AddObject("LeftScale", std::shared_ptr<LeftScale>(new LeftScale(s)));
+		chooser.AddObject("Mid", std::shared_ptr<Mid>(new Mid(s)));
+		chooser.AddObject("RightSwitch", std::shared_ptr<RightSwitch>(new RightSwitch(s)));
+		chooser.AddObject("RightScale", std::shared_ptr<RightScale>(new RightScale(s)));
+		chooser.AddObject("Turn90",std::shared_ptr<Turn>(new Turn(90)));
+		chooser.AddObject("Test group", std::shared_ptr<Test>(new Test()));
+		/*chooser.AddObject("25", std::shared_ptr<DriveForward>(new DriveForward(25)));
+		chooser.AddObject("50", std::shared_ptr<DriveForward>(new DriveForward(50)));
+		chooser.AddObject("75", std::shared_ptr<DriveForward>(new DriveForward(75)));
+		chooser.AddObject("100", std::shared_ptr<DriveForward>(new DriveForward(100)));
+		chooser.AddObject("150", std::shared_ptr<DriveForward>(new DriveForward(150)));
+		chooser.AddObject("175", std::shared_ptr<DriveForward>(new DriveForward(175)));
+		chooser.AddObject("200", std::shared_ptr<DriveForward>(new DriveForward(200)));
+		chooser.AddObject("Turn90",std::shared_ptr<Turn>(new Turn(90)));
+		chooser.AddObject("Turn -90", std::shared_ptr<Turn>(new Turn(-90)));
+		chooser.AddObject("Test group", std::shared_ptr<Test>(new Test()));
+		// chooser.AddObject("Turn -90", std::make_shared<Turn>(-90.));*/
+
+		//initCommand = chooser.GetSelected();
+
 		frc::SmartDashboard::PutData("Auto Modes", &chooser);
+
 	}
 
 	/**
@@ -26,13 +68,21 @@ public:
 	 * the robot is disabled.
 	 */
 	void DisabledInit() override {
-
+		if (!autonomousCommand.expired()) { // check if the autonomous command pointer is valid
+			// convert the weak pointer to a std::shared_ptr<> to access its contents
+			// In this case, we can use auto instead of "std::shared_ptr<frc::Command>"
+			if (auto autonomousCommandSP = autonomousCommand.lock()) {
+				// Cancel the command if it is running
+				if (autonomousCommandSP->IsRunning()) {
+					autonomousCommandSP->Cancel();
+				}
+			}
+		}
 	}
 
 	void DisabledPeriodic() override {
 		frc::Scheduler::GetInstance()->Run();
 	}
-
 	/**
 	 * This autonomous (along with the chooser code above) shows how to select
 	 * between different autonomous modes using the dashboard. The sendable
@@ -45,32 +95,48 @@ public:
 	 * to the if-else structure below with additional strings & commands.
 	 */
 	void AutonomousInit() override {
-		/* std::string autoSelected = frc::SmartDashboard::GetString("Auto Selector", "Default");
-		if (autoSelected == "My Auto") {
+		std::string autoSelected = frc::SmartDashboard::GetString("Auto Selector", "Default");
+		//cout << autoSelected << endl;
+		/*if (autoSelected == "My Auto") {
 			autonomousCommand.reset(new MyAutoCommand());
 		}
 		else {
 			autonomousCommand.reset(new ExampleCommand());
-		} */
+		}*/
 
-		autonomousCommand.reset(chooser.GetSelected());
+		std::cout<<"AutonomousInit Successful" <<std::endl;
 
-		if (autonomousCommand.get() != nullptr) {
-			autonomousCommand->Start();
-		}
+		// Obtain the selected command, which will be a std::weak_ptr<frc::command>
+		autonomousCommand = chooser.GetSelected();
+
+		// check if the std::weak_ptr<> refers to something valid
+		//if (!autonomousCommand.expifAutored()) {
+			// convert the weak pointer to a std::shared_ptr<> to access its contents
+			// In this case, we can use auto instead of "std::shared_ptr<frc::Command>"
+
+			if (auto autonomousCommandSP = autonomousCommand.lock()) {
+				//autonomousCommandSP->Start();
+				autonomousCommand.lock()->Start();
+			}
+		//}
 	}
 
 	void AutonomousPeriodic() override {
 		frc::Scheduler::GetInstance()->Run();
+
 	}
 
 	void TeleopInit() override {
-		// This makes sure that the autonomous stops running when
-		// teleop starts running. If you want the autonomous to
-		// continue until interrupted by another command, remove
-		// this line or comment it out.
-		if (autonomousCommand != nullptr) {
-			autonomousCommand->Cancel();
+
+		if (!autonomousCommand.expired()) { // check if the autonomous command pointer is valid
+			// convert the weak pointer to a std::shared_ptr<> to access its contents
+			// In this case, we can use auto instead of "std::shared_ptr<frc::Command>"
+			if (auto autonomousCommandSP = autonomousCommand.lock()) {
+				// Cancel the command if it is running
+				if (autonomousCommandSP->IsRunning()) {
+					autonomousCommandSP->Cancel();
+				}
+			}
 		}
 	}
 
@@ -83,8 +149,9 @@ public:
 	}
 
 private:
-	std::unique_ptr<frc::Command> autonomousCommand;
-	frc::SendableChooser<frc::Command*> chooser;
+	std::weak_ptr<frc::Command> autonomousCommand; // command selected on driver station
+	std::weak_ptr<frc::Command> initCommand; // command selected on driver station
+	frc::SendableChooser<std::shared_ptr<frc::Command>> chooser;
 };
 
 START_ROBOT_CLASS(Robot)
