@@ -44,8 +44,8 @@ double DriveTrain::Limit(double num, double max) {
 }
 
 void DriveTrain::tankDrive(double leftVal, double rightVal) {
-	left->Set(ControlMode::PercentOutput, DriveTrain::Limit(leftVal, 0.5));
-	right->Set(ControlMode::PercentOutput, DriveTrain::Limit(rightVal, 0.5));
+	left->Set(ControlMode::PercentOutput, DriveTrain::Limit(leftVal, 0.3));
+	right->Set(ControlMode::PercentOutput, DriveTrain::Limit(rightVal, 0.3));
 	//cout << "left: " << leftVal << "  right: " << rightVal << endl;
 }
 

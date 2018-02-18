@@ -44,32 +44,26 @@ void DriveForward::Execute() {
 	cout << "   Distance: " << average;
 	cout<<"Error"<< error<<endl;
 	//double multiplier = ;
-	if(iterator >= 1.0){
-		if(error > .1) {
-			cout << "too much" << endl;
-			//drive -> tankDrive(0.5, 0.5);
-			drive->tankDrive(0.2+ distPidValue + error/15 , 0.2 + distPidValue - error/15);
-			std::cout << "Left power More: " << 0.2+ distPidValue + error/15 << std::endl;
-			std::cout << "Right power More: " << 0.2 + distPidValue - error/15 << std::endl;
+	if(error > .1) {
+		cout << "too much" << endl;
+		//drive -> tankDrive(0.5, 0.5);
+		drive->tankDrive(0.15+ distPidValue + error/15 , 0.15 + distPidValue - error/15);
+		std::cout << "Left power More: " << 0.15+ distPidValue + error/15 << std::endl;
+		std::cout << "Right power More: " << 0.15 + distPidValue - error/15 << std::endl;
 
-		}
-		else if (error < -0.1){
-			cout << "too less" << endl;
-			//drive -> tankDrive(0.5, 0.5);
-			drive->tankDrive(0.2+ distPidValue - error/15 , 0.2+ distPidValue + error/15);
-			std::cout << "Left power Less: " << 0.2+ distPidValue - error/15 << std::endl;
-			std::cout << "Right power Less: " << 0.2+ distPidValue + error/15 << std::endl;
-		}
-
-		else {
-			drive->tankDrive(0.2+ distPidValue, 0.2+ distPidValue);
-			std::cout << "Both power: " << 0.2+ distPidValue << std::endl;
-		}
 	}
-	//error = drive->getAngle() - angle;
-	drive->tankDrive(0.2+ distPidValue, 0.2+ distPidValue);
-	std::cout << "Both power: " << 0.2+ distPidValue << std::endl;
+	else if (error < -0.1){
+		cout << "too less" << endl;
+		//drive -> tankDrive(0.5, 0.5);
+		drive->tankDrive(0.15+ distPidValue - error/15 , 0.15+ distPidValue + error/15);
+		std::cout << "Left power Less: " << 0.15+ distPidValue - error/15 << std::endl;
+		std::cout << "Right power Less: " << 0.15+ distPidValue + error/15 << std::endl;
+	}
 
+	else {
+		drive->tankDrive(0.15+ distPidValue, 0.15+ distPidValue);
+		std::cout << "Both power: " << 0.15+ distPidValue << std::endl;
+	}
 
 }
 
