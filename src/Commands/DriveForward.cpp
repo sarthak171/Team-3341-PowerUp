@@ -47,22 +47,34 @@ void DriveForward::Execute() {
 	if(error > .1) {
 		cout << "too much" << endl;
 		//drive -> tankDrive(0.5, 0.5);
-		drive->tankDrive(0.15+ distPidValue + error/15 , 0.15 + distPidValue - error/15);
+		/*drive->tankDrive(0.15+ distPidValue + error/15 , 0.15 + distPidValue - error/15);
 		std::cout << "Left power More: " << 0.15+ distPidValue + error/15 << std::endl;
-		std::cout << "Right power More: " << 0.15 + distPidValue - error/15 << std::endl;
-
+		std::cout << "Right power More: " << 0.15 + distPidValue - error/15 << std::endl;*/
+		isLeft = true;
+		isRight =  false;
 	}
 	else if (error < -0.1){
 		cout << "too less" << endl;
 		//drive -> tankDrive(0.5, 0.5);
-		drive->tankDrive(0.15+ distPidValue - error/15 , 0.15+ distPidValue + error/15);
+		/*drive->tankDrive(0.15+ distPidValue - error/15 , 0.15+ distPidValue + error/15);
 		std::cout << "Left power Less: " << 0.15+ distPidValue - error/15 << std::endl;
-		std::cout << "Right power Less: " << 0.15+ distPidValue + error/15 << std::endl;
+		std::cout << "Right power Less: " << 0.15+ distPidValue + error/15 << std::endl;*/
+		isRight = true;
+		isLeft = false;
 	}
-
+	if(isLeft){
+		drive->tankDrive(0.15+ distPidValue/3 + error/10 , 0.15 + distPidValue/3 - error/10);
+		std::cout << "Left power More: " << 0.15+ distPidValue/3 + error/15 << std::endl;
+		std::cout << "Right power More: " << 0.15 + distPidValue/3 - error/15 << std::endl;
+	}
+	else if(isRight){
+		drive->tankDrive(0.15+ distPidValue/3 - error/10 , 0.15+ distPidValue/3 + error/10);
+		std::cout << "Left power Less: " << 0.15+ distPidValue/3 - error/15 << std::endl;
+		std::cout << "Right power Less: " << 0.15+ distPidValue/3 + error/15 << std::endl;
+	}
 	else {
-		drive->tankDrive(0.15+ distPidValue, 0.15+ distPidValue);
-		std::cout << "Both power: " << 0.15+ distPidValue << std::endl;
+		drive->tankDrive(0.2+ distPidValue, 0.2+ distPidValue);
+		std::cout << "Both power: " << 0.2+ distPidValue << std::endl;
 	}
 
 }

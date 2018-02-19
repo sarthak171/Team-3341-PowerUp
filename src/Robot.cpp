@@ -44,8 +44,8 @@ public:
 		chooser.AddObject("RightScale", std::shared_ptr<RightScale>(new RightScale(s)));
 		chooser.AddObject("Turn90",std::shared_ptr<Turn>(new Turn(90)));
 		chooser.AddObject("Test group", std::shared_ptr<Test>(new Test()));
-		/*chooser.AddObject("25", std::shared_ptr<DriveForward>(new DriveForward(25)));
-		chooser.AddObject("50", std::shared_ptr<DriveForward>(new DriveForward(50)));
+		chooser.AddObject("Turn Test", std::shared_ptr<TurnTest>(new TurnTest()));
+		/*chooser.AddObject("50", std::shared_ptr<DriveForward>(new DriveForward(50)));
 		chooser.AddObject("75", std::shared_ptr<DriveForward>(new DriveForward(75)));
 		chooser.AddObject("100", std::shared_ptr<DriveForward>(new DriveForward(100)));
 		chooser.AddObject("150", std::shared_ptr<DriveForward>(new DriveForward(150)));

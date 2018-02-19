@@ -6,14 +6,14 @@
 
 class Turn : public CommandBase {
 	public:
-	Turn(double _setpoint);
+	Turn(double _setpoint, double kP);
 	void Initialize();
 	void Execute();
 	bool IsFinished();
 	void End();
 	void Interrupted();
 private:
-	double kP = 0.05;
+	//double kP = 0.05;
 	double kI = 0;
 	double kD = 0.0;
 	double setpoint;

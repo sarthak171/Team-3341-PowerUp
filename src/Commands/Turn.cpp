@@ -1,7 +1,7 @@
 #include "Turn.h"
 #include "iostream"
 using namespace std;
-Turn::Turn(double _setpoint) : setpoint(_setpoint), pid(new AutoWVPIDController(kP, kI, kD, setpoint, false)) {
+Turn::Turn(double _setpoint, double kP) : setpoint(_setpoint), pid(new AutoWVPIDController(kP, kI, kD, setpoint, false)) {
 	// Use Requires() here to declare subsystem dependencies
 	// eg. Requires(Robot::chassis.get());
 	Requires(drive);

@@ -17,6 +17,8 @@ private:
 	double angle = 0;
 	double iterator = 0.0;
 	double MULT = 1.2;
+	bool isLeft = false;
+	bool isRight = false;
 
 	AutoWVPIDController* distancePid;
 	AutoWVPIDController* anglePid;
