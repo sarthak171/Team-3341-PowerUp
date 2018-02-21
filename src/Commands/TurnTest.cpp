@@ -6,12 +6,14 @@
 /*----------------------------------------------------------------------------*/
 
 #include "TurnTest.h"
-#include "Turn.h"
+#include "Turn2.h"
 #include "Delay.h"
+#include <iostream>
 
 TurnTest::TurnTest() {
-	for(double i = .01; i<=1; i+=.01){
-		AddSequential(new Turn(90,i));
+	for(double i = .03; i<=1; i+=.01){
+		AddSequential(new Turn2(90,i));
 		AddSequential(new Delay(3));
+		std::cout<<i<<std::endl;
 	}
 }

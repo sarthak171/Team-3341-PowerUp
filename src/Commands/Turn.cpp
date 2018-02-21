@@ -1,7 +1,7 @@
 #include "Turn.h"
 #include "iostream"
 using namespace std;
-Turn::Turn(double _setpoint, double kP) : setpoint(_setpoint), pid(new AutoWVPIDController(kP, kI, kD, setpoint, false)) {
+Turn::Turn(double _setpoint) : setpoint(_setpoint), pid(new AutoWVPIDController(kP, kI, kD, setpoint, false)) {
 	// Use Requires() here to declare subsystem dependencies
 	// eg. Requires(Robot::chassis.get());
 	Requires(drive);
@@ -19,10 +19,18 @@ void Turn::Execute() {
 
 	angle = drive->getAngle();
 	cout << "Angle: " << angle;
-	double anglePID = -pid->Tick(angle);
-	drive->arcadeDrive(0, anglePID, 0.5);
-	cout << "   Power Output: " << anglePID;
+	double anglePID = pid->Tick(angle);
+<<<<<<< HEAD
+	//drive->arcadeDrive(0,.15+anglePID/20, 0.3);
+	drive->tankDrive(.15+anglePID/20,-.2-anglePID/20); //right(strong),left(weak)
+=======
+	//drive->arcadeDrive(0, anglePID, 0.5);
+	drive->tankDrive(0.15+anglePID/20, -0.15-anglePID/20); //Right(Strong),Left(weak) increase left constant to allow turn on axis
+	cout << "   Power Output: " << 0.15+anglePID/20;
+>>>>>>> d9d81f6ba9f501402b3d1b10363a303bdf995f3f
 
+	cout << "   Power Output: " << .15+anglePID/20;
+	cout << "   Power Output: " << -.2-anglePID/20;
 
 	// std::cout << -pid->Tick(angle) << std::endl;
 	//negative because turning clockwise gyro returns positive
@@ -34,12 +42,12 @@ bool Turn::IsFinished(){
 
 	double error = setpoint - drive->getAngle();
 	cout << "   Error: " << error<< endl;
-	return fabs(error) < 1;
+	return fabs(error) < .3;
 }
 
 // Called once after isFinished returns true
 void Turn::End() {
-	drive->arcadeDrive(0, 0, 0.5);
+	drive->arcadeDrive(0, 0, 0.3);
 }
 
 // Called when another command which requires one or more of the same

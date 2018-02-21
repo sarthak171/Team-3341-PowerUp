@@ -19,7 +19,7 @@ using namespace std;
 #include "Commands/RightScale.h"
 #include "Commands/Auto_Mid_LSwitch.h"
 #include "Commands/Auto_Left_Switch.h"
-
+#include "Commands/TurnTest.h"
 #include "Commands/Test.h"
 
 //#include <Commands/PrintCommand2.h>
