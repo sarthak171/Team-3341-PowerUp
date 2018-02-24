@@ -28,7 +28,7 @@ void DriveForward::Initialize() {
 // Called repeatedly when this Command is scheduled to run
 void DriveForward::Execute() {
 	average = fabs((drive->leftDistance() + drive->rightDistance()) / 2);
-	double distPidValue = distancePid->Tick(average);
+	double distPidValue = distancePid->Tick(average)/1.66;
 
 	//angle = drive->getAngle();
 	cout << "Angle: " << angle << endl;
@@ -63,14 +63,14 @@ void DriveForward::Execute() {
 		isLeft = false;
 	}
 	if(isLeft){
-		drive->tankDrive(0.15+ distPidValue/3 + error/10 , 0.15 + distPidValue/3 - error/10);
-		std::cout << "Left power More: " << 0.15+ distPidValue/3 + error/15 << std::endl;
-		std::cout << "Right power More: " << 0.15 + distPidValue/3 - error/15 << std::endl;
+		drive->tankDrive(0.15+ distPidValue + error/10 , 0.15 + distPidValue - error/10);
+		std::cout << "Left power More: " << 0.15+ distPidValue + error/15 << std::endl;
+		std::cout << "Right power More: " << 0.15 + distPidValue - error/15 << std::endl;
 	}
 	else if(isRight){
-		drive->tankDrive(0.15+ distPidValue/3 - error/10 , 0.15+ distPidValue/3 + error/10);
-		std::cout << "Left power Less: " << 0.15+ distPidValue/3 - error/15 << std::endl;
-		std::cout << "Right power Less: " << 0.15+ distPidValue/3 + error/15 << std::endl;
+		drive->tankDrive(0.15+ distPidValue - error/10 , 0.15+ distPidValue + error/10);
+		std::cout << "Left power Less: " << 0.15+ distPidValue - error/15 << std::endl;
+		std::cout << "Right power Less: " << 0.15+ distPidValue + error/15 << std::endl;
 	}
 	else {
 		drive->tankDrive(0.2+ distPidValue, 0.2+ distPidValue);
