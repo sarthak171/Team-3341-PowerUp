@@ -20,5 +20,5 @@ CommandBase::CommandBase(const std::string &name) :
 void CommandBase::initialize()
 {
 	drive = new DriveTrain();
-	oi = std::mark_unique<OI>();
+	oi = std::make_unique<OI>();
 }

@@ -1,10 +1,11 @@
 #include "DriveForward.h"
-#include "iostream"
+#include <iostream>
+#include <cmath>
 using namespace std;
 
 DriveForward::DriveForward(double _setpoint) : setpoint(_setpoint),
 		distancePid(new AutoWVPIDController(distKp, disKi, distKd, setpoint, false)),
-				anglePid(new AutoWVPIDController(angleKp, angleKi, angleKd, 0, false)) {
+		anglePid(new AutoWVPIDController(angleKp, angleKi, angleKd, 0, false)) {
 	// Use Requires() here to declare subsystem dependencies
 	// eg. Requires(Robot::chassis.get());
 	Requires(drive);
@@ -14,20 +15,24 @@ DriveForward::DriveForward(double _setpoint) : setpoint(_setpoint),
 
 // Called just before this Command runs the first time
 void DriveForward::Initialize() {
-	std::cout << "Autonomous Initialize" << std::endl;
-	drive->resetEncoders();
+	//std::cout << "Autonomous Initialize" << std::endl;
+	while(fabs(drive->leftDistance()) >=5 && fabs(drive->rightDistance() >= 5)){
+		drive->resetEncoders();
+		cout<<"Left: "<<drive->leftDistance()<<" Right:  "<<drive->rightDistance()<<endl;
+	}
 	std::cout << "Encoder Reset" << std::endl;
 	drive->gyroReset();
-	std::cout << "Gyro Reset" << std::endl;
+	//std::cout << "Gyro Reset" << std::endl;
 	angle = drive->getAngle();
-	std::cout << "Drive Angle " << std::endl;
-
+	//std::cout << "Reset works " << std::endl;
 	//drive->setStartAbsTicks();
 }
 
 // Called repeatedly when this Command is scheduled to run
 void DriveForward::Execute() {
-	average = fabs((drive->leftDistance() + drive->rightDistance()) / 2);
+	cout<<"Left: "<<drive->leftDistance()<<" Right:  "<<drive->rightDistance()<<endl;
+
+	average = fabs((drive->leftDistance() + drive->rightDistance()) / 2); //change
 	double distPidValue = distancePid->Tick(average)/1.66;
 
 	//angle = drive->getAngle();
@@ -62,15 +67,21 @@ void DriveForward::Execute() {
 		isRight = true;
 		isLeft = false;
 	}
-	if(isLeft){
-		drive->tankDrive(0.15+ distPidValue + error/10 , 0.15 + distPidValue - error/10);
-		std::cout << "Left power More: " << 0.15+ distPidValue + error/15 << std::endl;
-		std::cout << "Right power More: " << 0.15 + distPidValue - error/15 << std::endl;
+	//isRight = false;
+	//isLeft = true;
+	cout<<"isRight: "<<isRight<<" isLeft: "<< isLeft<<endl;
+	cout<<"distPid: "<<distPidValue<<endl;
+	if(isRight){ //isLeft
+		//drive->tankDrive(0.2+ distPidValue, 0.2+ distPidValue);
+		drive->tankDrive(0.15+ distPidValue + error/10 , 0.15 + fabs(distPidValue) - fabs(error)/10);
+		std::cout << "Left power More: " << 0.15+ distPidValue + error/10 << std::endl;
+		std::cout << "Right power More: " << 0.15 + fabs(distPidValue)- fabs(error)/10 << std::endl;
 	}
-	else if(isRight){
+	else if(isLeft){ //isRight
+		//drive->tankDrive(0.2+ distPidValue, 0.2+ distPidValue);
 		drive->tankDrive(0.15+ distPidValue - error/10 , 0.15+ distPidValue + error/10);
-		std::cout << "Left power Less: " << 0.15+ distPidValue - error/15 << std::endl;
-		std::cout << "Right power Less: " << 0.15+ distPidValue + error/15 << std::endl;
+		std::cout << "Left power Less: " << 0.15+ distPidValue - error/10 << std::endl;
+		std::cout << "Right power Less: " << 0.15+ distPidValue + error/10 << std::endl;
 	}
 	else {
 		drive->tankDrive(0.2+ distPidValue, 0.2+ distPidValue);

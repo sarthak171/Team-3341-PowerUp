@@ -2,11 +2,11 @@
 
 
 
-Delay::Delay(float timeout) {
+Delay::Delay(double timeout) {
 
 	Requires(drive);
 
-	Initialize();
+	//Initialize();
 
 	timer = timeout;
 
@@ -15,7 +15,6 @@ Delay::Delay(float timeout) {
 
 
 void Delay::Initialize() {
-
 	SetTimeout(timer);
 
 }
@@ -23,7 +22,6 @@ void Delay::Initialize() {
 
 
 void Delay::Execute() {
-
 }
 
 

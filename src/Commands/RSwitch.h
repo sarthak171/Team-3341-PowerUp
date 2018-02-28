@@ -5,14 +5,13 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#include "Mid.h"
-#include "Auto_Mid_LSwitch.h"
-#include "Auto_Mid_RSwitch.h"
+#pragma once
+
+#include <Commands/CommandGroup.h>
 #include <iostream>
 
-Mid::Mid(std::string s) {
-	if(s[0] == 'L')
-		AddSequential(new Auto_Mid_LSwitch());
-	else
-		AddSequential(new Auto_Mid_RSwitch());
-}
+class RSwitch : public frc::CommandGroup {
+public:
+	RSwitch(std::string s);
+};
+

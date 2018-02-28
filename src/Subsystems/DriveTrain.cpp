@@ -12,10 +12,12 @@ DriveTrain::DriveTrain() : Subsystem("DriveTrain"), left(new TalonSRX(LEFTMOTOR)
 	left->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative,0,10);
 	// left->ConfigEncoderCodesPerRev(360);
 	left->SetSelectedSensorPosition(0,0,10);
+	left->Set(ControlMode::Position, 0);
 
 	right->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative,0,10);
 	// right->ConfigEncoderCodesPerRev(360);
 	right->SetSelectedSensorPosition(0,0,10);
+	right->Set(ControlMode::Position, 0);
 
 	std::cout<<"DriveTrain Constructor Successful" <<std::endl;
 	right->SetInverted(true);
@@ -44,8 +46,8 @@ double DriveTrain::Limit(double num, double max) {
 }
 
 void DriveTrain::tankDrive(double leftVal, double rightVal) {
-	left->Set(ControlMode::PercentOutput, DriveTrain::Limit(leftVal, 0.3));
-	right->Set(ControlMode::PercentOutput, DriveTrain::Limit(rightVal, 0.3));
+	left->Set(ControlMode::PercentOutput, DriveTrain::Limit(leftVal, .5));
+	right->Set(ControlMode::PercentOutput, DriveTrain::Limit(rightVal,.5));
 	//cout << "left: " << leftVal << "  right: " << rightVal << endl;
 }
 
@@ -102,6 +104,10 @@ void DriveTrain::gyroCalibrate(){
 void DriveTrain::resetEncoders(){
 	left->SetSelectedSensorPosition(0,0,10);
 	right->SetSelectedSensorPosition(0,0,10);
+	left->Set(ControlMode::Position, 0);
+	right->Set(ControlMode::Position, 0);
+	cout << left->HasResetOccurred() << endl;
+	cout<<"reset enc"<<endl;
 }
 
 /* DriveTrain::setStartAbsTicks(){
@@ -111,12 +117,12 @@ void DriveTrain::resetEncoders(){
 
 double DriveTrain::leftDistance() { //inches
 
-	double test = left->GetSensorCollection().GetPulseWidthPosition();
+	//double test = left->GetSensorCollection().GetPulseWidthPosition();
 	double relativePosition = left->GetSensorCollection().GetQuadraturePosition(); // Return ticks
 
 	relativePosition = ((relativePosition) / 4096) * circumference; // 4096 ticks per revolution
 	//cout << "Abs: " << test << endl;
-	test = ((test)/ 4096) * circumference;
+	//test = ((test)/ 4096) * circumference;
 
 	//cout << "Start: " << startAbsTicks << endl;
 	//cout<< "Relative Position: " << relativePosition <<std::endl;

@@ -4,15 +4,12 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
+#pragma once
 
-#include "Mid.h"
-#include "Auto_Mid_LSwitch.h"
-#include "Auto_Mid_RSwitch.h"
+#include <Commands/CommandGroup.h>
 #include <iostream>
 
-Mid::Mid(std::string s) {
-	if(s[0] == 'L')
-		AddSequential(new Auto_Mid_LSwitch());
-	else
-		AddSequential(new Auto_Mid_RSwitch());
-}
+class LScale : public frc::CommandGroup {
+public:
+	LScale(std::string s);
+};
