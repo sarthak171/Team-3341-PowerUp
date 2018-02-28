@@ -19,6 +19,7 @@ private:
 	double MULT = 1.2;
 	bool isLeft = false;
 	bool isRight = false;
+	double startDistPidValue;
 
 	AutoWVPIDController* distancePid;
 	AutoWVPIDController* anglePid;

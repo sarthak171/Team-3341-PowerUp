@@ -23,7 +23,6 @@ DriveTrain::DriveTrain() : Subsystem("DriveTrain"), left(new TalonSRX(LEFTMOTOR)
 	right->SetInverted(true);
 
 	gyro->Calibrate();
-	gyro->Reset();
 
 }
 
@@ -46,8 +45,8 @@ double DriveTrain::Limit(double num, double max) {
 }
 
 void DriveTrain::tankDrive(double leftVal, double rightVal) {
-	left->Set(ControlMode::PercentOutput, DriveTrain::Limit(leftVal, .5));
-	right->Set(ControlMode::PercentOutput, DriveTrain::Limit(rightVal,.5));
+	left->Set(ControlMode::PercentOutput, DriveTrain::Limit(leftVal, .4));
+	right->Set(ControlMode::PercentOutput, DriveTrain::Limit(rightVal, .4));
 	//cout << "left: " << leftVal << "  right: " << rightVal << endl;
 }
 

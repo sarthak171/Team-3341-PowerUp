@@ -20,22 +20,26 @@ void Turn::Execute() {
 	double error = setpoint - drive->getAngle();
 	angle = drive->getAngle();
 	cout << "Angle: " << angle;
-	double anglePID = pid->Tick(angle);
-	cout<<"AnglePid"<<anglePID/3.5<<endl;
+	double anglePID = pid->Tick(angle)/7.5;
+	cout<<"AnglePid"<<anglePID<<endl;
 
 		//drive->arcadeDrive(0, anglePID, 0.5);
 	if(error<0){
 		cout<<"Hello"<<endl;//anglePID/20
+		//left
 		//drive->tankDrive( -0.3-anglePID/20, 0.4+anglePID/20); --> code for bag n tag robot
-		drive->tankDrive( -0.4-fabs(anglePID)/3.5, 0.4+fabs(anglePID)/3.5);
+		drive->tankDrive( -0.4-fabs(anglePID), 0.4+fabs(anglePID));
+		cout << "Right" << 0.4+ fabs(anglePID);
+		cout<<"  Left "<< -.4- fabs(anglePID)<<endl;
 	}
 	else{
+		//right
 		//drive->tankDrive( 0.3+anglePID/20, -0.15-anglePID/20); --> code for bag n tag robot
-		drive->tankDrive( 0.4+anglePID/3.5, -0.4-anglePID/3.5); //weak,strong increase left constant to allow turn on axis
-
+		drive->tankDrive( 0.4+anglePID, -0.4-anglePID); //weak,strong increase left constant to allow turn on axis
+		cout << "Right" << 0.4+anglePID;
+		cout<<"  Left "<< -.4-anglePID<<endl;
 	}
-	cout << "Right" << 0.3+anglePID/3.5;
-	cout<<"  Left "<< -.3-anglePID/3.5<<endl;
+
 
 
 	// std::cout << -pid->Tick(angle) << std::endl;

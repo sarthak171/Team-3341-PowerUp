@@ -5,9 +5,6 @@
 Delay::Delay(double timeout) {
 
 	Requires(drive);
-
-	//Initialize();
-
 	timer = timeout;
 
 }
@@ -16,19 +13,20 @@ Delay::Delay(double timeout) {
 
 void Delay::Initialize() {
 	SetTimeout(timer);
-
 }
 
 
 
 void Delay::Execute() {
+	drive->resetEncoders();
+	drive->gyroReset();
 }
 
 
 
 bool Delay::IsFinished() {
 
-	return IsTimedOut();
+	return IsTimedOut() && fabs(drive->leftDistance()) <=5 && fabs(drive->rightDistance()) <= 5 && fabs(drive->getAngle()) <= 2;
 
 }
 

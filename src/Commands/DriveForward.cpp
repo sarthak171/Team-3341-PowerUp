@@ -15,11 +15,14 @@ DriveForward::DriveForward(double _setpoint) : setpoint(_setpoint),
 
 // Called just before this Command runs the first time
 void DriveForward::Initialize() {
+	int i = 0;
+	//startDistPidValue = (distancePid->Tick(average))*2.5;
 	//std::cout << "Autonomous Initialize" << std::endl;
-	while(fabs(drive->leftDistance()) >=5 && fabs(drive->rightDistance() >= 5)){
+	/**while(fabs(drive->leftDistance()) >=5 || fabs(drive->rightDistance()) >= 5){
 		drive->resetEncoders();
+		cout << "SARTHAKLKSJDGJSDKGKLSDJGKL:          " << ++i << endl;
 		cout<<"Left: "<<drive->leftDistance()<<" Right:  "<<drive->rightDistance()<<endl;
-	}
+	}*/
 	std::cout << "Encoder Reset" << std::endl;
 	drive->gyroReset();
 	//std::cout << "Gyro Reset" << std::endl;
@@ -33,7 +36,9 @@ void DriveForward::Execute() {
 	cout<<"Left: "<<drive->leftDistance()<<" Right:  "<<drive->rightDistance()<<endl;
 
 	average = fabs((drive->leftDistance() + drive->rightDistance()) / 2); //change
-	double distPidValue = distancePid->Tick(average)/1.66;
+	double distPidValue = (distancePid->Tick(average))*2.5;
+
+	//double distPidValue = 2*(((distancePid->Tick(average))/(2-distancePid->Tick(average)))*2.5;
 
 	//angle = drive->getAngle();
 	cout << "Angle: " << angle << endl;

@@ -23,6 +23,7 @@ using namespace std;
 #include <Commands/RScaleSwitch.h>
 #include "Commands/Auto_Right_Switch.h"
 #include "Commands/Auto_Mid_LSwitch.h"
+#include "Commands/Auto_Mid_RSwitch.h"
 #include "Commands/Auto_Left_Switch.h"
 
 //#include <Commands/PrintCommand2.h>
@@ -44,6 +45,8 @@ public:
 
 		//mid
 		chooser.AddObject("Mid", std::shared_ptr<Mid>(new Mid(s)));
+		chooser.AddObject("RightMid", std::shared_ptr<Auto_Mid_RSwitch>(new Auto_Mid_RSwitch()));
+		chooser.AddObject("LeftMid", std::shared_ptr<Auto_Mid_LSwitch>(new Auto_Mid_LSwitch()));
 
 		//left
 		chooser.AddObject("Prioritize Scale Left", std::shared_ptr<LScaleSwitch>(new LScaleSwitch(s)));
