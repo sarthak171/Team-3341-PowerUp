@@ -26,7 +26,7 @@ void Delay::Execute() {
 
 bool Delay::IsFinished() {
 
-	return IsTimedOut() && fabs(drive->leftDistance()) <=5 && fabs(drive->rightDistance()) <= 5 && fabs(drive->getAngle()) <= 2;
+	return IsTimedOut() && fabs(drive->leftDistance()) <= 5 && fabs(drive->rightDistance()) <= 5 && fabs(drive->getAngle()) <= 2;
 
 }
 

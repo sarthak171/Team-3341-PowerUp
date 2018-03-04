@@ -20,8 +20,8 @@ DriveTrain::DriveTrain() : Subsystem("DriveTrain"), left(new TalonSRX(LEFTMOTOR)
 	right->Set(ControlMode::Position, 0);
 
 	std::cout<<"DriveTrain Constructor Successful" <<std::endl;
-	right->SetInverted(true);
-
+	right->SetInverted(false);
+	left->SetInverted(true);
 	gyro->Calibrate();
 
 }
@@ -45,8 +45,8 @@ double DriveTrain::Limit(double num, double max) {
 }
 
 void DriveTrain::tankDrive(double leftVal, double rightVal) {
-	left->Set(ControlMode::PercentOutput, DriveTrain::Limit(leftVal, .4));
-	right->Set(ControlMode::PercentOutput, DriveTrain::Limit(rightVal, .4));
+	left->Set(ControlMode::PercentOutput, DriveTrain::Limit(leftVal, 1));
+	right->Set(ControlMode::PercentOutput, DriveTrain::Limit(rightVal, 1));
 	//cout << "left: " << leftVal << "  right: " << rightVal << endl;
 }
 

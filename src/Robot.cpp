@@ -1,4 +1,5 @@
 #include <memory>
+#include <iostream>
 
 #include <Commands/Command.h>
 #include <Commands/Scheduler.h>
@@ -12,21 +13,21 @@ using namespace std;
 #include "Commands/TankDrive.h"
 #include "Commands/DriveForward.h"
 #include "Commands/Turn.h"
-#include <Commands/LSwitch.h>
-#include <Commands/RSwitch.h>
-#include <Commands/LScale.h>
-#include <Commands/RScale.h>
-#include <Commands/LScaleSwitch.h>
-#include <Commands/LSwitchScale.h>
+#include "Commands/LSwitch.h"
+#include "Commands/RSwitch.h"
+#include "Commands/LScale.h"
+#include "Commands/RScale.h"
+#include "Commands/LScaleSwitch.h"
+#include "Commands/LSwitchScale.h"
 #include "Commands/Mid.h"
-#include <Commands/RSwitchScale.h>
-#include <Commands/RScaleSwitch.h>
+#include "Commands/RSwitchScale.h"
+#include "Commands/RScaleSwitch.h"
 #include "Commands/Auto_Right_Switch.h"
 #include "Commands/Auto_Mid_LSwitch.h"
 #include "Commands/Auto_Mid_RSwitch.h"
+#include "Commands/Test_Mechs.h"
 #include "Commands/Auto_Left_Switch.h"
 
-//#include <Commands/PrintCommand2.h>
 
 class Robot: public frc::IterativeRobot {
 
@@ -34,51 +35,52 @@ public:
 	void RobotInit() override {
 		CommandBase::initialize();
 		cout << "comm-----" << endl;
-		cout << "robot init" << endl;
-		std::string s = frc::DriverStation::GetInstance().GetGameSpecificMessage();
-		// Store the commands in the chooser, giving it ownership.
-		// To dynamically allocate a shared_ptr<> with a new Turn command
-		// these are equivalent:  std::shared_ptr<Turn>(new Turn(90.)
-		//                        std::make_shared<Turn>(90.)
-		//chooser.AddDefault("Default Auto - DriveForward", std::shared_ptr<DriveForward>(new DriveForward(100)));
-		chooser.AddDefault("Default", std::shared_ptr<DriveForward>(new DriveForward(To_Switch+Mid_Targets)));
+				cout << "robot init" << endl;
+				std::string s = frc::DriverStation::GetInstance().GetGameSpecificMessage();
+				// Store the commands in the chooser, giving it ownership.
+				// To dynamically allocate a shared_ptr<> with a new Turn command
+				// these are equivalent:  std::shared_ptr<Turn>(new Turn(90.)
+				//                        std::make_shared<Turn>(90.)
+				//chooser.AddDefault("Default Auto - DriveForward", std::shared_ptr<DriveForward>(new DriveForward(100)));
+				chooser.AddDefault("Default", std::shared_ptr<DriveForward>(new DriveForward(100)));
 
-		//mid
-		chooser.AddObject("Mid", std::shared_ptr<Mid>(new Mid(s)));
-		chooser.AddObject("RightMid", std::shared_ptr<Auto_Mid_RSwitch>(new Auto_Mid_RSwitch()));
-		chooser.AddObject("LeftMid", std::shared_ptr<Auto_Mid_LSwitch>(new Auto_Mid_LSwitch()));
+				//mid
+				chooser.AddObject("Mid", std::shared_ptr<Mid>(new Mid(s)));
+				chooser.AddObject("RightMid", std::shared_ptr<Auto_Mid_RSwitch>(new Auto_Mid_RSwitch()));
+				chooser.AddObject("LeftMid", std::shared_ptr<Auto_Mid_LSwitch>(new Auto_Mid_LSwitch()));
 
-		//left
-		chooser.AddObject("Prioritize Scale Left", std::shared_ptr<LScaleSwitch>(new LScaleSwitch(s)));
-		chooser.AddObject("Prioritize Switch Left", std::shared_ptr<LSwitchScale>(new LSwitchScale(s)));
-		chooser.AddObject("Switch Left", std::shared_ptr<LSwitch>(new LSwitch(s)));
-		chooser.AddObject("Scale Left", std::shared_ptr<LScale>(new LScale(s)));
+				//left
+				chooser.AddObject("Prioritize Scale Left", std::shared_ptr<LScaleSwitch>(new LScaleSwitch(s)));
+				chooser.AddObject("Prioritize Switch Left", std::shared_ptr<LSwitchScale>(new LSwitchScale(s)));
+				chooser.AddObject("Switch Left", std::shared_ptr<LSwitch>(new LSwitch(s)));
+				chooser.AddObject("Scale Left", std::shared_ptr<LScale>(new LScale(s)));
 
-		//right
-		chooser.AddObject("Prioritize Scale Right", std::shared_ptr<RScaleSwitch>(new RScaleSwitch(s)));
-		chooser.AddObject("Prioritize Switch Right", std::shared_ptr<RSwitchScale>(new RSwitchScale(s)));
-		chooser.AddObject("Switch Right", std::shared_ptr<RSwitch>(new RSwitch(s)));
-		chooser.AddObject("Scale Right", std::shared_ptr<RScale>(new RScale(s)));
-
-
+				//right
+				chooser.AddObject("Prioritize Scale Right", std::shared_ptr<RScaleSwitch>(new RScaleSwitch(s)));
+				chooser.AddObject("Prioritize Switch Right", std::shared_ptr<RSwitchScale>(new RSwitchScale(s)));
+				chooser.AddObject("Switch Right", std::shared_ptr<RSwitch>(new RSwitch(s)));
+				chooser.AddObject("Scale Right", std::shared_ptr<RScale>(new RScale(s)));
 
 
 
+				chooser.AddObject("TestMechanism",std::shared_ptr<Test_Mechs>(new Test_Mechs()));
 
-		chooser.AddObject("Turn-90",std::shared_ptr<Turn>(new Turn(-90)));
-		chooser.AddObject("Turn90",std::shared_ptr<Turn>(new Turn(90)));
-		chooser.AddObject("Auto_Mid_Lswitch", std::shared_ptr<Auto_Mid_LSwitch>(new Auto_Mid_LSwitch()));
-		chooser.AddObject("100", std::shared_ptr<DriveForward>(new DriveForward(100)));
-		/*chooser.AddObject("75", std::shared_ptr<DriveForward>(new DriveForward(75)));
-		chooser.AddObject("100", std::shared_ptr<DriveForward>(new DriveForward(100)));
-		chooser.AddObject("150", std::shared_ptr<DriveForward>(new DriveForward(150)));
-		chooser.AddObject("175", std::shared_ptr<DriveForward>(new DriveForward(175)));
-		chooser.AddObject("200", std::shared_ptr<DriveForward>(new DriveForward(200)));
-		// chooser.AddObject("Turn -90", std::make_shared<Turn>(-90.));*/
 
-		//initCommand = chooser.GetSelected();
+				chooser.AddObject("Turn-90",std::shared_ptr<Turn>(new Turn(-90)));
+				chooser.AddObject("Turn90",std::shared_ptr<Turn>(new Turn(90)));
+				chooser.AddObject("Auto_Mid_Lswitch", std::shared_ptr<Auto_Mid_LSwitch>(new Auto_Mid_LSwitch()));
+				chooser.AddObject("100", std::shared_ptr<DriveForward>(new DriveForward(100)));
+				/*chooser.AddObject("75", std::shared_ptr<DriveForward>(new DriveForward(75)));
+				chooser.AddObject("100", std::shared_ptr<DriveForward>(new DriveForward(100)));
+				chooser.AddObject("150", std::shared_ptr<DriveForward>(new DriveForward(150)));
+				chooser.AddObject("175", std::shared_ptr<DriveForward>(new DriveForward(175)));
+				chooser.AddObject("200", std::shared_ptr<DriveForward>(new DriveForward(200)));
+				// chooser.AddObject("Turn -90", std::make_shared<Turn>(-90.));*/
 
-		frc::SmartDashboard::PutData("Auto Modes", &chooser);
+				//initCommand = chooser.GetSelected();
+
+				frc::SmartDashboard::PutData("Auto Modes", &chooser);
+		CameraServer::GetInstance()->StartAutomaticCapture();
 
 	}
 
@@ -165,7 +167,7 @@ public:
 	}
 
 	void TestPeriodic() override {
-		frc::LiveWindow::GetInstance()->Run();
+	//	frc::LiveWindow::GetInstance()->Run();
 	}
 
 private:

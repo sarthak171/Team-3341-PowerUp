@@ -1,6 +1,10 @@
 #include "Auto_Left_LScale.h"
 #include "../CommandBase.h"
 #include "Delay.h"
+#include "MoveLiftToHeight.h"
+#include "AutoArmMove.h"
+#include "ReleaseCrate.h"
+#include "Test_Mechs.h"
 using namespace std;
 
 Auto_Left_LScale::Auto_Left_LScale() {
@@ -10,6 +14,5 @@ Auto_Left_LScale::Auto_Left_LScale() {
 	AddSequential(new Turn(90));
 	AddSequential(new Delay(.5));
 	AddSequential(new DriveForward(Forward_Scale));
-	//AddSequential(new Arm(90,.5));
-	//AddSequential(new Conveyor(45,2));
+	AddParallel(new Test_Mechs());
 }

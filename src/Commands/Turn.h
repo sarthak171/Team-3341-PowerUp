@@ -20,6 +20,11 @@ private:
 	double angle = 0;
 	double speed = 0;
 	AutoWVPIDController* pid;
+	double lastval = 0.0;
+	int iterator = 0;
+	double bound = 0.0;
+	double startPidValue = 0.0;
+	double minimumSpeed = 0.0;
 };
 
 #endif  // Turn_H

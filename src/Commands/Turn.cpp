@@ -13,34 +13,42 @@ void Turn::Initialize() {
 	drive->gyroReset();
 	//drive->resetEncoders();
 	//std::cout<<"Turn Initialize Successful" <<std::endl;
+	iterator = 0;
+	lastval = 1000;
+	bound = 1.0/3.0*setpoint;
+	startPidValue = pid->Tick(setpoint); //2.5
 }
 
 // Called repeatedly when this Command is scheduled to run
 void Turn::Execute() {
+	iterator ++;
 	double error = setpoint - drive->getAngle();
 	angle = drive->getAngle();
 	cout << "Angle: " << angle;
-	double anglePID = pid->Tick(angle)/7.5;
-	cout<<"AnglePid"<<anglePID<<endl;
+	//double anglePID = pid->Tick(angle)/7.5;
+	double anglePID = pid->Tick(angle)/2;
+	//double anglePID = (pid->Tick((fabs((fabs((error)-bound*startDistPidValue))-bound*startDistPidValue)))); //*2.5
 
+	cout<<"AnglePid"<<anglePID<<endl;
+	minimumSpeed = 0.4;
 		//drive->arcadeDrive(0, anglePID, 0.5);
 	if(error<0){
 		cout<<"Hello"<<endl;//anglePID/20
 		//left
 		//drive->tankDrive( -0.3-anglePID/20, 0.4+anglePID/20); --> code for bag n tag robot
-		drive->tankDrive( -0.4-fabs(anglePID), 0.4+fabs(anglePID));
-		cout << "Right" << 0.4+ fabs(anglePID);
-		cout<<"  Left "<< -.4- fabs(anglePID)<<endl;
+		drive->tankDrive(minimumSpeed +fabs(anglePID) , -minimumSpeed-fabs(anglePID));
+		cout << "Right" << minimumSpeed + fabs(anglePID);
+		cout<<"  Left "<< -minimumSpeed- fabs(anglePID)<<endl;
+		cout << "AnglePID " << anglePID << endl;
 	}
 	else{
 		//right
 		//drive->tankDrive( 0.3+anglePID/20, -0.15-anglePID/20); --> code for bag n tag robot
-		drive->tankDrive( 0.4+anglePID, -0.4-anglePID); //weak,strong increase left constant to allow turn on axis
-		cout << "Right" << 0.4+anglePID;
-		cout<<"  Left "<< -.4-anglePID<<endl;
+		drive->tankDrive(-minimumSpeed-fabs(anglePID), minimumSpeed+fabs(anglePID)); //weak,strong increase left constant to allow turn on axis
+		cout << "Right" << minimumSpeed+anglePID;
+		cout<<"  Left "<< -minimumSpeed-anglePID<<endl;
+		cout << "AnglePID " << anglePID << endl;
 	}
-
-
 
 	// std::cout << -pid->Tick(angle) << std::endl;
 	//negative because turning clockwise gyro returns positive
@@ -49,6 +57,13 @@ void Turn::Execute() {
 
 // Make this return true when this Command no longer needs to run execute()
 bool Turn::IsFinished(){
+
+	if(iterator%20 == 0){
+				if(fabs(lastval - angle)<0.05){
+					return true;
+				}
+				lastval = angle;
+			}
 
 	double error = setpoint - drive->getAngle();
 	cout << "   Error: " << error<< endl;

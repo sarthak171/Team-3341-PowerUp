@@ -1,7 +1,6 @@
 #include "TankDrive.h"
 
-TankDrive::TankDrive()
-{
+TankDrive::TankDrive() {
 	// Use Requires() here to declare subsystem dependencies
 	// eg. Requires(Robot::chassis.get());
 	Requires(drive);
@@ -10,7 +9,6 @@ TankDrive::TankDrive()
 
 // Called just before this Command runs the first time
 void TankDrive::Initialize() {
-	//drive->setStartAbsTicks();
 	drive->resetEncoders();
 }
 
@@ -18,9 +16,8 @@ void TankDrive::Initialize() {
 
 void TankDrive::Execute() {
 	drive->tankDrive(-oi->getLeftStick()->GetY(), -oi->getRightStick()->GetY());
-
-	//double average = (drive->leftDistance() + drive->rightDistance()) / 2;
-	// std::cout << drive->getAngle() << std::endl;
+	double average = (drive->leftDistance() + drive->rightDistance()) / 2;
+	//std::cout << drive->getAngle() << std::endl;
 }
 
 // Make this return true when this Command no longer needs to run execute()
